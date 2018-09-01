@@ -1,6 +1,7 @@
 // Very simplist test, could be better.
 
-#include "any.hpp"
+#include <libany/any.h>
+
 #include <cstdio>
 #include <memory>
 #include <string>
