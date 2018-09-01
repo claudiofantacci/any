@@ -1,8 +1,9 @@
 // Very simplist test, could be better.
 
 #include "any.hpp"
-#include <memory>
 #include <cstdio>
+#include <memory>
+#include <string>
 
 #define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %d:%s: %s\n", __LINE__, __FILE__, #x)), std::exit(EXIT_FAILURE)))
 
