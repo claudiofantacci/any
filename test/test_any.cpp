@@ -1,6 +1,7 @@
 #include <libany/any.h>
 
 #include <cstdio>
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -63,6 +64,7 @@ int main()
     using linb::any_cast;
     using linb::bad_any_cast;
 
+    std::cout << "First group of test." << std::endl;
 
     {
         any x = 4;
@@ -87,6 +89,7 @@ int main()
         CHECK(x.empty() && y.empty() && z.empty());
     }
 
+    std::cout << "Second group of test." << std::endl;
 
     {
         CHECK(any().type() == typeid(void));
@@ -102,6 +105,7 @@ int main()
         CHECK(any(std::string("string")).type() == typeid(std::string));
     }
 
+    std::cout << "Third group of test." << std::endl;
 
     {
         bool except0 = false;
@@ -162,6 +166,7 @@ int main()
         CHECK(except3 == true && except4 == false);
     }
 
+    std::cout << "Fourth group of test." << std::endl;
 
     {
         any i4 = 4;
@@ -182,6 +187,7 @@ int main()
         CHECK(any_cast<big_type>(big1).check() && any_cast<big_type>(big2).check() && any_cast<big_type>(big3).check());
     }
 
+    std::cout << "Fifth group of test." << std::endl;
 
     {
         std::shared_ptr<int> ptr_count(new int);
@@ -227,6 +233,7 @@ int main()
         CHECK(weak.use_count() == 0);
     }
 
+    std::cout << "Sixth group of test." << std::endl;
 
     {
         auto is_stack_allocated = [](const any& a, const void* obj1)
@@ -268,4 +275,8 @@ int main()
         any r1 = regression1_type();
         CHECK(is_stack_allocated(r1, any_cast<const regression1_type>(&r1)));
     }
+
+    std::cout << "All test passed." << std::endl;
+
+    return EXIT_SUCCESS;
 }
