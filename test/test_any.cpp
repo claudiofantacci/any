@@ -71,22 +71,22 @@ int main()
         any y = big_type();
         any z = 6;
 
-        CHECK(any().empty());
+        CHECK(any().has_value());
 
-        CHECK(!any(1).empty());
+        CHECK(!any(1).has_value());
 
-        CHECK(!any(big_type()).empty());
+        CHECK(!any(big_type()).has_value());
 
-        CHECK(!x.empty() && !y.empty() && !z.empty());
+        CHECK(!x.has_value() && !y.has_value() && !z.has_value());
 
-        y.clear();
-        CHECK(!x.empty() && y.empty() && !z.empty());
+        y.reset();
+        CHECK(!x.has_value() && y.has_value() && !z.has_value());
 
         x = y;
-        CHECK(x.empty() && y.empty() && !z.empty());
+        CHECK(x.has_value() && y.has_value() && !z.has_value());
 
         z = any();
-        CHECK(x.empty() && y.empty() && z.empty());
+        CHECK(x.has_value() && y.has_value() && z.has_value());
     }
 
     std::cout << "Second group of test." << std::endl;
@@ -217,7 +217,7 @@ int main()
         p0 = 0;
         CHECK(weak.use_count() == 3);
 
-        p1.clear();
+        p1.reset();
         CHECK(weak.use_count() == 2);
 
         p2 = any(big_type());

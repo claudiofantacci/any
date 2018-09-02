@@ -1,4 +1,4 @@
-/*
+/**
  * Implementation of N4562 std::experimental::any (merged into C++17 as std::any)
  * for C++11 compilers.
  *
@@ -21,6 +21,7 @@
 #include <typeinfo>
 #include <type_traits>
 #include <stdexcept>
+
 
 namespace linb
 {
@@ -52,7 +53,7 @@ public:
     any(const any& rhs) :
         vtable(rhs.vtable)
     {
-        if(!rhs.empty())
+        if(!rhs.has_value())
         {
             rhs.vtable->copy(rhs.storage, this->storage);
         }
@@ -66,7 +67,7 @@ public:
     any(any&& rhs) noexcept :
         vtable(rhs.vtable)
     {
-        if(!rhs.empty())
+        if(!rhs.has_value())
         {
             rhs.vtable->move(rhs.storage, this->storage);
             rhs.vtable = nullptr;
@@ -79,7 +80,7 @@ public:
      */
     ~any()
     {
-        this->clear();
+        this->reset();
     }
 
 
@@ -127,8 +128,7 @@ public:
     template<typename ValueType, typename = typename std::enable_if<!std::is_same<typename std::decay<ValueType>::type, any>::value>::type>
     any& operator=(ValueType&& value)
     {
-        static_assert(std::is_copy_constructible<typename std::decay<ValueType>::type>::value,
-                      "T shall satisfy the CopyConstructible requirements.");
+        static_assert(std::is_copy_constructible<typename std::decay<ValueType>::type>::value, "T shall satisfy the CopyConstructible requirements.");
         any(std::forward<ValueType>(value)).swap(*this);
         return *this;
     }
@@ -137,9 +137,9 @@ public:
     /**
      * If not empty, destroys the contained object.
      */
-    void clear() noexcept
+    void reset() noexcept
     {
-        if(!empty())
+        if(!has_value())
         {
             this->vtable->destroy(storage);
             this->vtable = nullptr;
@@ -150,7 +150,7 @@ public:
     /**
      * Returns true if *this has no contained object, otherwise false.
      */
-    bool empty() const noexcept
+    bool has_value() const noexcept
     {
         return this->vtable == nullptr;
     }
@@ -161,28 +161,23 @@ public:
      */
     const std::type_info& type() const noexcept
     {
-        return empty()? typeid(void) : this->vtable->type();
+        return has_value()? typeid(void) : this->vtable->type();
     }
 
 
     /**
      * Exchange the states of *this and rhs.
      */
-    void swap(any& rhs) noexcept
+    void swap(any& other) noexcept
     {
-        if(this->vtable != rhs.vtable)
+        if(this->vtable != other.vtable)
         {
-            any tmp(std::move(rhs));
+            any tmp(std::move(other));
 
-            // move from *this to rhs.
-            rhs.vtable = this->vtable;
+            other.vtable = this->vtable;
             if(this->vtable != nullptr)
-            {
-                this->vtable->move(this->storage, rhs.storage);
-                //this->vtable = nullptr; -- uneeded, see below
-            }
+                this->vtable->move(this->storage, other.storage);
 
-            // move from tmp (previously rhs) to *this.
             this->vtable = tmp.vtable;
             if(tmp.vtable != nullptr)
             {
@@ -190,11 +185,11 @@ public:
                 tmp.vtable = nullptr;
             }
         }
-        else // same types
+        else
         {
             if(this->vtable != nullptr)
-                this->vtable->swap(this->storage, rhs.storage);
-                }
+                this->vtable->swap(this->storage, other.storage);
+        }
     }
 
 
