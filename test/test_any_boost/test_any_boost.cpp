@@ -1,4 +1,4 @@
-#include <libany/any.h>
+#include <libanyboost/any_boost.h>
 
 #include <cstdio>
 #include <iostream>
@@ -60,9 +60,9 @@ struct regression1_type
 
 int main()
 {
-    using linb::any;
-    using linb::any_cast;
-    using linb::bad_any_cast;
+    using libanyboost::any;
+    using libanyboost::any_cast;
+    using libanyboost::bad_any_cast;
 
     std::cout << "First group of test." << std::endl;
 

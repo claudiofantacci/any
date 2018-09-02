@@ -23,7 +23,7 @@
 #include <stdexcept>
 
 
-namespace linb
+namespace libany
 {
 
 class bad_any_cast : public std::bad_cast
@@ -543,7 +543,7 @@ inline T* any_cast(any* operand) noexcept
 
 namespace std
 {
-    inline void swap(linb::any& lhs, linb::any& rhs) noexcept
+    inline void swap(libany::any& lhs, libany::any& rhs) noexcept
     {
         lhs.swap(rhs);
     }
