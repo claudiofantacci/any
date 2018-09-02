@@ -1,11 +1,12 @@
 #include <libanyboost/any_boost.h>
+#include <CpuTimer.h>
 
 #include <cstdio>
 #include <iostream>
 #include <memory>
 #include <string>
 
-#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %s:%d: %s\n", __FILE__, __LINE__, #x)), std::exit(EXIT_FAILURE)))
+#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "\nFailed at %s:%d: %s\n", __FILE__, __LINE__, #x)), std::exit(EXIT_FAILURE)))
 
 
 template<size_t N>
@@ -60,12 +61,15 @@ struct regression1_type
 
 int main()
 {
+    utils::CpuTimer<> cpu_timer;
+
     using libanyboost::any;
     using libanyboost::any_cast;
     using libanyboost::bad_any_cast;
 
-    std::cout << "First group of test." << std::endl;
 
+    std::cout << "First group of test: ";
+    cpu_timer.Start();
     {
         any x = 4;
         any y = big_type();
@@ -88,9 +92,12 @@ int main()
         z = any();
         CHECK(x.has_value() && y.has_value() && z.has_value());
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
-    std::cout << "Second group of test." << std::endl;
 
+    std::cout << "Second group of test: ";
+    cpu_timer.Start();
     {
         CHECK(any().type() == typeid(void));
 
@@ -104,9 +111,12 @@ int main()
 
         CHECK(any(std::string("string")).type() == typeid(std::string));
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
-    std::cout << "Third group of test." << std::endl;
 
+    std::cout << "Third group of test: ";
+    cpu_timer.Start();
     {
         bool except0 = false;
         bool except1 = false;
@@ -165,9 +175,12 @@ int main()
 
         CHECK(except3 == true && except4 == false);
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
-    std::cout << "Fourth group of test." << std::endl;
 
+    std::cout << "Fourth group of test: ";
+    cpu_timer.Start();
     {
         any i4 = 4;
         any i5 = 5;
@@ -186,9 +199,12 @@ int main()
 
         CHECK(any_cast<big_type>(big1).check() && any_cast<big_type>(big2).check() && any_cast<big_type>(big3).check());
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
-    std::cout << "Fifth group of test." << std::endl;
 
+    std::cout << "Fifth group of test: ";
+    cpu_timer.Start();
     {
         std::shared_ptr<int> ptr_count(new int);
         std::weak_ptr<int> weak = ptr_count;
@@ -232,9 +248,12 @@ int main()
         p1 = any();
         CHECK(weak.use_count() == 0);
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
-    std::cout << "Sixth group of test." << std::endl;
 
+    std::cout << "Sixth group of test: ";
+    cpu_timer.Start();
     {
         auto is_stack_allocated = [](const any& a, const void* obj1)
         {
@@ -275,6 +294,8 @@ int main()
         any r1 = regression1_type();
         CHECK(!is_stack_allocated(r1, any_cast<const regression1_type>(&r1)));
     }
+    cpu_timer.Stop();
+    std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
 
     std::cout << "All test passed." << std::endl;
 
