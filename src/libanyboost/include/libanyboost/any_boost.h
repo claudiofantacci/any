@@ -72,21 +72,6 @@ public:
     }
 
 
-    template<typename ValueType>
-    any& operator=(const ValueType & rhs)
-    {
-        any(rhs).swap(*this);
-        return *this;
-    }
-
-
-    any& operator=(any rhs)
-    {
-        any(rhs).swap(*this);
-        return *this;
-    }
-
-
     any& operator=(const any& rhs)
     {
         any(rhs).swap(*this);
@@ -153,7 +138,7 @@ private:
 
 
         holder(ValueType&& value) :
-          held(static_cast< ValueType&& >(value))
+          held(static_cast<ValueType&&>(value))
         { }
 
 
