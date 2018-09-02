@@ -110,13 +110,13 @@ public:
     }
 
 
-    bool empty() const noexcept
+    bool has_value() const noexcept
     {
         return !content;
     }
 
 
-    void clear() noexcept
+    void reset() noexcept
     {
         any().swap(*this);
     }
