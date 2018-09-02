@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %d:%s: %s\n", __LINE__, __FILE__, #x)), std::exit(EXIT_FAILURE)))
+#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %s:%d: %s\n", __FILE__, __LINE__, #x)), std::exit(EXIT_FAILURE)))
 
 
 template<size_t N>

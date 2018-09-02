@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %d:%s: %s\n", __LINE__, __FILE__, #x)), std::exit(EXIT_FAILURE)))
+#define CHECK(x) ((x)? (void)(0) : (void(fprintf(stdout, "Failed at %s:%d: %s\n", __FILE__, __LINE__, #x)), std::exit(EXIT_FAILURE)))
 
 
 template<size_t N>
@@ -255,25 +255,25 @@ int main()
         any w2 = words<2>();
         any w3 = words<3>();
 
-        CHECK(is_stack_allocated(i, any_cast<int>(&i)));
+        CHECK(!is_stack_allocated(i, any_cast<int>(&i)));
 
-        CHECK(is_stack_allocated(f, any_cast<float>(&f)));
+        CHECK(!is_stack_allocated(f, any_cast<float>(&f)));
 
-        CHECK(is_stack_allocated(rawptr, any_cast<void*>(&rawptr)));
+        CHECK(!is_stack_allocated(rawptr, any_cast<void*>(&rawptr)));
 
-        // CHECK(is_stack_allocated(unique, any_cast<std::unique_ptr<big_type>>(&unique)));
+        // CHECK(!is_stack_allocated(unique, any_cast<std::unique_ptr<big_type>>(&unique)));
 
-        CHECK(is_stack_allocated(shared, any_cast<std::shared_ptr<big_type>>(&shared)));
+        CHECK(!is_stack_allocated(shared, any_cast<std::shared_ptr<big_type>>(&shared)));
 
         CHECK(!is_stack_allocated(big, any_cast<big_type>(&big)));
 
-        CHECK(is_stack_allocated(w2, any_cast<words<2>>(&w2)));
+        CHECK(!is_stack_allocated(w2, any_cast<words<2>>(&w2)));
 
         CHECK(!is_stack_allocated(w3, any_cast<words<3>>(&w3)));
 
         // Regression test for GitHub Issue #1
         any r1 = regression1_type();
-        CHECK(is_stack_allocated(r1, any_cast<const regression1_type>(&r1)));
+        CHECK(!is_stack_allocated(r1, any_cast<const regression1_type>(&r1)));
     }
 
     std::cout << "All test passed." << std::endl;
