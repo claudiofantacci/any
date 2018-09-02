@@ -537,16 +537,13 @@ inline T* any_cast(any* operand) noexcept
     else
         return operand->cast<T>();
 }
-    
+
+
+inline void swap(any& lhs, any& rhs) noexcept
+{
+    lhs.swap(rhs);
 }
 
-
-namespace std
-{
-    inline void swap(libany::any& lhs, libany::any& rhs) noexcept
-    {
-        lhs.swap(rhs);
-    }
 }
 
 #endif /* ANY_H */
