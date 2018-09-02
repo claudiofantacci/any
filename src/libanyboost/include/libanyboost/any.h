@@ -97,7 +97,7 @@ public:
 
     bool has_value() const noexcept
     {
-        return !content;
+        return content;
     }
 
 

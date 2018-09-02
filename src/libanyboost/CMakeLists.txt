@@ -1,7 +1,7 @@
 set(LIBRARY_TARGET_NAME libanyboost)
 
 set(${LIBRARY_TARGET_NAME}_HDR
-        include/libanyboost/any_boost.h
+        include/libanyboost/any.h
 )
 
 add_library(${LIBRARY_TARGET_NAME} INTERFACE)
