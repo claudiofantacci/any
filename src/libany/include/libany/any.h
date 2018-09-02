@@ -53,7 +53,7 @@ public:
     any(const any& rhs) :
         vtable(rhs.vtable)
     {
-        if(!rhs.has_value())
+        if(rhs.has_value())
         {
             rhs.vtable->copy(rhs.storage, this->storage);
         }
@@ -67,7 +67,7 @@ public:
     any(any&& rhs) noexcept :
         vtable(rhs.vtable)
     {
-        if(!rhs.has_value())
+        if(rhs.has_value())
         {
             rhs.vtable->move(rhs.storage, this->storage);
             rhs.vtable = nullptr;
@@ -139,7 +139,7 @@ public:
      */
     void reset() noexcept
     {
-        if(!has_value())
+        if(has_value())
         {
             this->vtable->destroy(storage);
             this->vtable = nullptr;
@@ -152,7 +152,7 @@ public:
      */
     bool has_value() const noexcept
     {
-        return this->vtable == nullptr;
+        return this->vtable != nullptr;
     }
 
 
@@ -161,7 +161,7 @@ public:
      */
     const std::type_info& type() const noexcept
     {
-        return has_value()? typeid(void) : this->vtable->type();
+        return has_value()? this->vtable->type() : typeid(void);
     }
 
 
