@@ -18,9 +18,9 @@
 #ifndef ANY_H
 #define ANY_H
 
+#include <stdexcept>
 #include <typeinfo>
 #include <type_traits>
-#include <stdexcept>
 
 
 namespace libany

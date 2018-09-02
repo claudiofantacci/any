@@ -26,9 +26,9 @@
 
 #include <algorithm>
 #include <memory>
+#include <stdexcept>
 #include <typeinfo>
 #include <type_traits>
-#include <stdexcept>
 
 
 namespace libanyboost
