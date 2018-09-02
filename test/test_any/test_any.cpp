@@ -74,22 +74,22 @@ int main()
         any y = big_type();
         any z = 6;
 
-        CHECK(any().has_value());
+        CHECK(!any().has_value());
 
-        CHECK(!any(1).has_value());
+        CHECK(any(1).has_value());
 
-        CHECK(!any(big_type()).has_value());
+        CHECK(any(big_type()).has_value());
 
-        CHECK(!x.has_value() && !y.has_value() && !z.has_value());
+        CHECK(x.has_value() && y.has_value() && z.has_value());
 
         y.reset();
-        CHECK(!x.has_value() && y.has_value() && !z.has_value());
+        CHECK(x.has_value() && !y.has_value() && z.has_value());
 
         x = y;
-        CHECK(x.has_value() && y.has_value() && !z.has_value());
+        CHECK(!x.has_value() && !y.has_value() && z.has_value());
 
         z = any();
-        CHECK(x.has_value() && y.has_value() && z.has_value());
+        CHECK(!x.has_value() && !y.has_value() && !z.has_value());
     }
     cpu_timer.Stop();
     std::cout << "finished in " << cpu_timer.Elapsed() << "ms." << std::endl;
